@@ -11,7 +11,7 @@ export default class MainApp extends React.Component<Props> {
 
   render() {
     return (
-      <App>
+      <App colorIndex="grey-4">
         {this.props.children}
       </App>
     );

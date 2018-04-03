@@ -32,8 +32,8 @@
   },
   "browserslist": "electron 1.6",
   "build": {
-    "productName": "ElectronReact",
-    "appId": "org.develar.ElectronReact",
+    "productName": "TQCWallet",
+    "appId": "io.glv.TQCWallet",
     "files": [
       "dist/",
       "node_modules/",
@@ -78,8 +78,8 @@
     "url": "git+https://github.com/chentsulin/electron-react-boilerplate.git"
   },
   "author": {
-    "name": "C. T. Lin",
-    "email": "chentsulin@gmail.com",
+    "name": "Isaac Lex",
+    "email": "tearsofphoenix@icloud.com",
     "url": "https://github.com/chentsulin"
   },
   "license": "MIT",

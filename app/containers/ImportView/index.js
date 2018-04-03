@@ -44,7 +44,7 @@ class ImportView extends PureComponent<Props> {
     const { encrypted } = current
     const { seed } = this.state
     console.log(this.props.wallet)
-    return (<Article>
+    return (<Article colorIndex="grey-4" justify="center" align="center" flex="grow" style={{height: 'calc(100vh)'}}>
       <Section justify="center" align="center">
         <Form onSubmit={ this.onSubmit }>
           <FormFields>

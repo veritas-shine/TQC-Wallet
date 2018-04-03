@@ -7,12 +7,17 @@ import moment from 'moment'
 import { Link } from 'react-router-dom'
 
 type Props = {
-  data: any
+  data: any,
+  showBlockDetail: () => void
 };
 
 export default class BlockItem extends Component<Props> {
   props: Props;
-
+  showDetail = (event) => {
+    event.preventDefault()
+    const {data, showBlockDetail} = this.props
+    showBlockDetail(data)
+  }
   render() {
     const {data} = this.props
     const tx = data.transactions[0]
@@ -21,7 +26,7 @@ export default class BlockItem extends Component<Props> {
     return (
       <TableRow>
         <td>
-          <Link to={`/block/${data.hash}`}>{data.height}</Link>
+          <Link to={`/block/${data.hash}`} onClick={this.showDetail}>{data.height}</Link>
         </td>
         <td>
           {buffer.toString('utf8')}

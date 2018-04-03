@@ -45,7 +45,7 @@ class UnLockView extends PureComponent<Props> {
   }
 
   render() {
-    return (<Box align="center" justify="center">
+    return (<Box justify="center" align="center" flex="grow">
       <Form onSubmit={ this.onSubmit }>
         <FormFields>
           <fieldset>
@@ -56,7 +56,7 @@ class UnLockView extends PureComponent<Props> {
           </fieldset>
         </FormFields>
         <Footer pad={ { vertical: 'medium' } } justify="center">
-          <Button label="Submit" type="submit" primary />
+          <Button label="UnLock" type="submit" primary />
         </Footer>
       </Form>
     </Box>)
