@@ -1,0 +1,18 @@
+{
+  "name": "TQCWallet",
+  "productName": "TQCWallet",
+  "version": "1.0.0",
+  "description": "TQC Wallet",
+  "main": "./main.prod.js",
+  "author": {
+    "name": "Isaac Lex",
+    "email": "tearsofphoenix@icloud.com",
+    "url": ""
+  },
+  "scripts": {
+    "electron-rebuild": "node -r babel-register ../internals/scripts/ElectronRebuild.js",
+    "postinstall": "npm run electron-rebuild"
+  },
+  "license": "MIT",
+  "dependencies": {}
+}
