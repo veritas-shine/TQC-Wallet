@@ -10,8 +10,15 @@
  *
  * @flow
  */
-import { app, BrowserWindow } from 'electron';
-import MenuBuilder from './menu';
+import { app, BrowserWindow, ipcMain, dialog } from 'electron'
+import CryptoJS from 'crypto-js'
+import bip39 from 'bip39'
+import pqccore from 'pqc-core'
+import fs from 'fs'
+import MenuBuilder from './menu'
+import { getWalletPath } from './utils/storage'
+
+const { Keypair } = pqccore
 
 let mainWindow = null;
 
@@ -53,7 +60,6 @@ app.on('window-all-closed', () => {
   }
 });
 
-
 app.on('ready', async () => {
   if (process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true') {
     await installExtensions();
@@ -84,3 +90,35 @@ app.on('ready', async () => {
   const menuBuilder = new MenuBuilder(mainWindow);
   menuBuilder.buildMenu();
 });
+
+ipcMain.on('save-wallet', (event, data) => {
+  console.log(88, data)
+  const { seed, password, network } = data
+  const buffer = bip39.mnemonicToSeed(seed)
+  const seedString = buffer.toString('hex')
+  const bytes = CryptoJS.AES.encrypt(seedString, password)
+  const obj = {
+    seed: bytes.toString(), // base64 encoded
+    encrypted: true
+  }
+  const keypair = new Keypair({
+    secret: buffer,
+    network
+  })
+  const name = `wallet_${keypair.toAddress()}.pqc`
+  const defaultPath = `${getWalletPath()}/${name}`
+  const realPath = dialog.showSaveDialog(mainWindow, {
+    defaultPath,
+    filters: [
+      { name: 'Wallet File', extensions: ['pqc'] }
+    ]
+  })
+  if (realPath) {
+    // write to that path
+    if(fs.writeFileSync(realPath, JSON.stringify(obj))) {
+      ipcMain.send('save-wallet-result')
+    } else {
+      ipcMain.send('save-wallet-result', new Error('fail to save wallet'))
+    }
+  }
+})

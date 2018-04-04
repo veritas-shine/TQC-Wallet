@@ -16,7 +16,8 @@ const {base58check} = pqccore.Encoding
 
 type Props = {
   transaction: any,
-  hideSendView: () => void
+  hideSendView: () => void,
+  createTransaction: () => void
 }
 
 function mapStateToProps(state) {
@@ -43,18 +44,23 @@ class SendView extends PureComponent<Props> {
   }
   onSubmit = (event) => {
     event.preventDefault()
-    const {address} = this.state
+    const {address, amount} = this.state
     try {
       if (base58check.decode(address)) {
         // decode ok
+        this.props.createTransaction({amount, to: address}, message => {
+          if (message) {
+            // TODO
+          } else {
+
+          }
+        })
       }
     } catch (e) {
       // error
       console.error(e)
       this.setState({addressError: e.message})
     }
-
-    console.log(40, this.state)
   }
 
   render() {

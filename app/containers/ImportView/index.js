@@ -13,13 +13,17 @@ import bip39 from 'bip39'
 import UnLockView from '../UnLockView'
 import * as WalletActions from '../../actions/wallet'
 
+const { ipcRenderer } = require('electron')
+
 type Props = {
-  wallet: any
+  wallet: any,
+  server: any
 };
 
 function mapStateToProps(state) {
   return {
-    wallet: state.wallet
+    wallet: state.wallet,
+    server: state.server.config
   };
 }
 
@@ -38,33 +42,57 @@ class ImportView extends PureComponent<Props> {
   onSubmit = (event) => {
     event.preventDefault()
   }
+  onChange = (event) => {
+    const { name, value } = event.target
+    this.setState({ [name]: value, passwordError: null })
+  }
+  goSaveStep = (event) => {
+    event.preventDefault()
+    const { password, seed } = this.state
+    if (!password) {
+      this.setState({ passwordError: 'Please type your new password!' })
+    } else {
+      // save json file
+      const { network: { name } } = this.props.server
+      ipcRenderer.send('save-wallet', { seed, password, network: name })
+      ipcRenderer.on('save-wallet-result', (event, error) => {
+        if (error) {
+          // failt to save
+        } else {
+          // ok, so go next view
+          // TODO
+        }
+      })
+    }
+  }
 
   render() {
     const { wallet: { current } } = this.props
     const { encrypted } = current
-    const { seed } = this.state
+    const { seed, passwordError } = this.state
     console.log(this.props.wallet)
-    return (<Article colorIndex="grey-4" justify="center" align="center" flex="grow" style={{height: 'calc(100vh)'}}>
-      <Section justify="center" align="center">
-        <Form onSubmit={ this.onSubmit }>
-          <FormFields>
-            <fieldset>
-              <legend>Create a new wallet:</legend>
-              <FormField label="Seed:" htmlFor="cf-seed">
-                <input id="cf-seed" name="seed" type="text" value={ seed } disabled />
-              </FormField>
-              <FormField label="Password:" htmlFor="cf-password">
-                <PasswordInput id="cf-password" name="password" onChange={ this._onChange } />
-              </FormField>
-            </fieldset>
-          </FormFields>
-          <Footer pad={ { vertical: 'medium' } } justify="center">
-            <Button label="Submit" type="submit" primary />
-          </Footer>
-        </Form>
-      </Section>
-      { encrypted && <Section><UnLockView /></Section> }
-    </Article>)
+    return (
+      <Article colorIndex="grey-4" justify="center" align="center" flex="grow" style={ { height: 'calc(100vh)' } }>
+        <Section justify="center" align="center">
+          <Form onSubmit={ this.onSubmit }>
+            <FormFields>
+              <fieldset>
+                <legend>Create a new wallet:</legend>
+                <FormField label="Seed:" htmlFor="cf-seed">
+                  <input id="cf-seed" name="seed" type="text" value={ seed } disabled />
+                </FormField>
+                <FormField label="Password:" htmlFor="cf-password" error={ passwordError }>
+                  <PasswordInput id="cf-password" name="password" onChange={ this.onChange } />
+                </FormField>
+              </fieldset>
+            </FormFields>
+            <Footer pad={ { vertical: 'medium' } } justify="center">
+              <Button label="Create" onClick={ this.goSaveStep } primary />
+            </Footer>
+          </Form>
+        </Section>
+        { encrypted && <Section><UnLockView /></Section> }
+      </Article>)
   }
 }
 

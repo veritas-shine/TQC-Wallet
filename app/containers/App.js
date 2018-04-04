@@ -1,19 +1,37 @@
 // @flow
 import * as React from 'react'
 import App from 'grommet/components/App'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import * as serverActions from '../actions/server'
 
 type Props = {
-  children: React.Node
+  children: React.Node,
+  getServerConfig: () => void
 };
 
-export default class MainApp extends React.Component<Props> {
-  props: Props;
+function mapStateToProps(state) {
+  return {
+    server: state.server
+  };
+}
 
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(serverActions, dispatch)
+}
+
+class MainApp extends React.Component<Props> {
+  props: Props
+  componentWillMount() {
+    this.props.getServerConfig()
+  }
   render() {
     return (
-      <App colorIndex="grey-4">
+      <App>
         {this.props.children}
       </App>
     );
   }
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(MainApp)

@@ -7,6 +7,7 @@ type actionType = {
 
 export const SEARCH_TX = 'SEARCH_TX'
 export const SAVE_TX_LIST = 'SAVE_TX_LIST'
+export const CREATE_TX = 'CREATE_TX'
 
 export function setCurrentTX(payload) {
   return {
@@ -19,6 +20,12 @@ export function saveTXList(payload) {
   return {
     type: SAVE_TX_LIST,
     payload
+  }
+}
+
+export function createTX() {
+  return {
+    type: CREATE_TX
   }
 }
 
@@ -41,6 +48,22 @@ export function getTransactionList() {
       .then(response => {
         const { code, data } = response.data
         return dispatch(saveTXList(data))
+      })
+      .catch(e => {
+        console.error(e)
+      })
+  }
+}
+
+export function createTransaction(args, callback) {
+  return (dispatch: (action: actionType) => void) => {
+    request('/transaction/create', 'post', args)
+      .then(response => {
+        const {code, data, message} = response.data
+        if (callback) {
+          callback(message)
+        }
+        return dispatch(createTX())
       })
       .catch(e => {
         console.error(e)

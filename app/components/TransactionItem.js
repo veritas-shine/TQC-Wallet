@@ -23,7 +23,7 @@ export default class TransactionItem extends Component<Props> {
       const output = outputs[0]
       console.log(17, output.publicKeyHash)
       console.log(25, network)
-      const prefix = Buffer.from([0x30])
+      const prefix = Buffer.from([network])
       const buffer = Buffer.from(output.publicKeyHash, 'hex')
       const address = base58check.encode(Buffer.concat([prefix, buffer]))
       return (
