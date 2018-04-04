@@ -56,7 +56,11 @@ class WalletView extends Component<Props> {
   }
 
   renderUnlockView = () => {
-    return (<UnlockView />)
+    return (
+      <Box justify="center" align="center" flex="grow" style={{height: 'calc(100vh - 300px)'}}>
+        <UnlockView />
+      </Box>
+    )
   }
 
   renderWallet = () => {

@@ -47,3 +47,7 @@ a:hover {
   text-decoration: none;
   cursor: pointer;
 }
+
+.grommetux-password-input__input {
+  letter-spacing: 14px;
+}

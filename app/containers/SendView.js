@@ -7,10 +7,12 @@ import Button from 'grommet/components/Button'
 import Form from 'grommet/components/Form'
 import Box from 'grommet/components/Box'
 import LinkPrevious from 'grommet/components/icons/base/LinkPrevious'
+import pqccore from 'pqc-core'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-
 import * as transactionActions from '../actions/transaction'
+
+const {base58check} = pqccore.Encoding
 
 type Props = {
   transaction: any,
@@ -41,10 +43,22 @@ class SendView extends PureComponent<Props> {
   }
   onSubmit = (event) => {
     event.preventDefault()
+    const {address} = this.state
+    try {
+      if (base58check.decode(address)) {
+        // decode ok
+      }
+    } catch (e) {
+      // error
+      console.error(e)
+      this.setState({addressError: e.message})
+    }
+
     console.log(40, this.state)
   }
 
   render() {
+    const {addressError} = this.state
     return (<Box align="center" justify="center">
       <Form onSubmit={ this.onSubmit }>
         <Header>
@@ -53,14 +67,14 @@ class SendView extends PureComponent<Props> {
         <FormFields>
           <fieldset>
             <legend>Send TQC:</legend>
-            <FormField label="Address:" htmlFor="svaddress">
+            <FormField label="Address:" htmlFor="svaddress" error={addressError}>
               <input id="svaddress" name="address" type="text" onChange={ this._onChange } />
             </FormField>
             <FormField label="Amount:" htmlFor="svamount">
               <input id="svamount" name="amount" type="text" onChange={ this._onChange } />
             </FormField>
             <FormField label="Fee:" htmlFor="svfee">
-              <input id="svfee" name="fee" type="text" onChange={ this._onChange } />
+              <input id="svfee" name="fee" type="text" disabled />
             </FormField>
           </fieldset>
         </FormFields>

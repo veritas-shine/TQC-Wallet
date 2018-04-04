@@ -11,6 +11,7 @@ import * as transactionActions from '../actions/transaction'
 import TransactionItem from '../components/TransactionItem'
 
 type Props = {
+  wallet: any,
   transaction: any,
   getTransactionList: () => void,
   searchTransactionByID: ({ id: string }) => void
@@ -18,7 +19,8 @@ type Props = {
 
 function mapStateToProps(state) {
   return {
-    transaction: state.transaction
+    transaction: state.transaction,
+    wallet: state.wallet
   };
 }
 
@@ -51,8 +53,9 @@ class TransactionView extends PureComponent<Props> {
   }
 
   render() {
-    const { transaction: { list } } = this.props
-    return (<Box style={{padding: 20}}>
+    const { wallet: { current }, transaction: { list } } = this.props
+    const { network } = current
+    return (<Box style={ { padding: 20 } }>
       <Header>
         <Title>
           Search:
@@ -63,7 +66,7 @@ class TransactionView extends PureComponent<Props> {
           direction='row'
           responsive={ false }>
           <Search
-            style={{border: '1px solid #999'}}
+            style={ { border: '1px solid #999' } }
             inline
             fill
             size="medium"
@@ -75,9 +78,9 @@ class TransactionView extends PureComponent<Props> {
         </Box>
       </Header>
       <Table>
-        {TransactionItem.Column}
+        { TransactionItem.Column }
         <tbody>
-        { list.map((looper, idx) => <TransactionItem key={ idx } data={ looper } />) }
+        { list.map((looper, idx) => <TransactionItem key={ idx } data={ looper } network={ 0x30 } />) }
         </tbody>
       </Table>
     </Box>)
