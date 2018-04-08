@@ -2,9 +2,11 @@
 import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import Section from 'grommet/components/Section'
 import * as WalletActions from '../actions/wallet'
 import MainView from './MainView'
 import ImportView from './ImportView'
+import UnLockView from './UnLockView'
 
 type Props = {
   wallet: any,
@@ -36,10 +38,15 @@ class HomePage extends Component<Props> {
   }
 
   render() {
-    const { wallet } = this.props
+    const { wallet: {current} } = this.props
+    const {address, encrypted} = current
     let content = null
-    if (wallet.current.address) {
+    if (address) {
       content = <MainView />
+    } else if (encrypted) {
+      content = (<Section style={{height: '100%'}} colorIndex="grey-4">
+        <UnLockView />
+      </Section>)
     } else {
       content = <ImportView needReloadView={this.needReloadView} />
     }

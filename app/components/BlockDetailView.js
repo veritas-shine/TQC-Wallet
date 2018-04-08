@@ -28,7 +28,7 @@ export default class BlockDetailView extends Component<Props> {
     const tx = data.transactions[0]
     const { signature } = tx.inputs[0]
     const buffer = Buffer.from(signature, 'hex')
-    const style = { borderBottom: '1px solid #999', padding: 16, fontSize: '1.4em'}
+    const style = { borderBottom: '1px solid #2A2929', padding: 16, fontSize: '1.4em'}
     return (<Article>
         <Header>
           <Button icon={ <LinkPrevious /> } label="Back" onClick={ this.props.goBack } plain />

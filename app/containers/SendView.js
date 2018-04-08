@@ -48,7 +48,7 @@ class SendView extends PureComponent<Props> {
     try {
       if (base58check.decode(address)) {
         // decode ok
-        this.props.createTransaction({amount, to: address}, message => {
+        this.props.createTransaction({amount: parseFloat(amount), to: address}, message => {
           if (message) {
             // TODO
           } else {

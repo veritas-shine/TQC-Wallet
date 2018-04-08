@@ -12,7 +12,6 @@ import PasswordInput from 'grommet/components/PasswordInput'
 import CopyIcon from 'grommet/components/icons/base/Copy'
 import swal from 'sweetalert2'
 import bip39 from 'bip39'
-import UnLockView from '../UnLockView'
 import * as serverActions from '../../actions/server'
 
 const { ipcRenderer } = require('electron')
@@ -79,9 +78,7 @@ class ImportView extends PureComponent<Props> {
 
   render() {
     const { wallet: { current } } = this.props
-    const { encrypted } = current
     const { seed, passwordError } = this.state
-    console.log(this.props.wallet)
     return (
       <Article colorIndex="grey-4" justify="center" align="center" flex="grow" style={ { height: 'calc(100vh)' } }>
         <Section justify="center" align="center">
@@ -105,7 +102,6 @@ class ImportView extends PureComponent<Props> {
             </Footer>
           </Form>
         </Section>
-        { encrypted && <Section><UnLockView /></Section> }
       </Article>)
   }
 }

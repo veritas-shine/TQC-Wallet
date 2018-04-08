@@ -66,7 +66,7 @@ class TransactionView extends PureComponent<Props> {
           direction='row'
           responsive={ false }>
           <Search
-            style={ { border: '1px solid #999' } }
+            style={ { border: '1px solid #2A2929' } }
             inline
             fill
             size="medium"

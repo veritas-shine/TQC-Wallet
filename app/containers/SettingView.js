@@ -8,13 +8,13 @@ import Split from 'grommet/components/Split'
 export default class SettingView extends PureComponent {
   render() {
     return (
-      <Split separator flex="right">
+      <Split separator flex="right" style={{height: 'calc(100vh - 200px)', overflow: 'hidden', borderBottom: '1px solid #2A2929'}}>
         <Sidebar>
           <Box flex='grow'
                justify='start'>
             <Menu primary={ true }>
               <Anchor href='#' className='active'>
-                First
+                Debug
               </Anchor>
               <Anchor href='#'>
                 Second
