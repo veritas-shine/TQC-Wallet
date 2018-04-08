@@ -9,15 +9,19 @@ import FormField from 'grommet/components/FormField'
 import Button from 'grommet/components/Button'
 import Article from 'grommet/components/Article'
 import PasswordInput from 'grommet/components/PasswordInput'
+import CopyIcon from 'grommet/components/icons/base/Copy'
+import swal from 'sweetalert2'
 import bip39 from 'bip39'
 import UnLockView from '../UnLockView'
-import * as WalletActions from '../../actions/wallet'
+import * as serverActions from '../../actions/server'
 
 const { ipcRenderer } = require('electron')
 
 type Props = {
   wallet: any,
-  server: any
+  server: any,
+  reloadServer: () => void,
+  needReloadView: () => void
 };
 
 function mapStateToProps(state) {
@@ -28,7 +32,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators(WalletActions, dispatch)
+  return bindActionCreators(serverActions, dispatch)
 }
 
 class ImportView extends PureComponent<Props> {
@@ -55,15 +59,22 @@ class ImportView extends PureComponent<Props> {
       // save json file
       const { network: { name } } = this.props.server
       ipcRenderer.send('save-wallet', { seed, password, network: name })
-      ipcRenderer.on('save-wallet-result', (event, error) => {
-        if (error) {
-          // failt to save
-        } else {
-          // ok, so go next view
-          // TODO
-        }
+      ipcRenderer.on('save-wallet-result', (event, data) => {
+        // ok, so go next view
+        // TODO
+        this.props.reloadServer()
+        this.props.needReloadView()
       })
     }
+  }
+
+  handleCopy = (event) => {
+    event.preventDefault()
+    const {seed} = this.state
+    ipcRenderer.send('copy-clipboard', seed)
+    ipcRenderer.on('copy-clipboard-result', (e, data) => {
+      swal('Seed copied to clipboard')
+    })
   }
 
   render() {
@@ -79,7 +90,10 @@ class ImportView extends PureComponent<Props> {
               <fieldset>
                 <legend>Create a new wallet:</legend>
                 <FormField label="Seed:" htmlFor="cf-seed">
-                  <input id="cf-seed" name="seed" type="text" value={ seed } disabled />
+                  <div className="grommetux-password-input">
+                    <textarea id="cf-seed" rows={2} name="seed" value={ seed } disabled style={{width: '100%'}} />
+                    <Button icon={<CopyIcon />} style={{position: 'absolute', right: '6px', top: '24px'}} plain onClick={this.handleCopy} />
+                  </div>
                 </FormField>
                 <FormField label="Password:" htmlFor="cf-password" error={ passwordError }>
                   <PasswordInput id="cf-password" name="password" onChange={ this.onChange } />

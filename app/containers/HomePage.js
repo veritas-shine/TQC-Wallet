@@ -31,13 +31,17 @@ class HomePage extends Component<Props> {
     console.log(20, this.props)
   }
 
+  needReloadView = () => {
+    this.props.getCurrentWallet()
+  }
+
   render() {
     const { wallet } = this.props
     let content = null
     if (wallet.current.address) {
       content = <MainView />
     } else {
-      content = <ImportView />
+      content = <ImportView needReloadView={this.needReloadView} />
     }
     return content
   }

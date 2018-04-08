@@ -1,6 +1,7 @@
 // @flow
 import pqccore from 'pqc-core'
 import request from '../utils/request'
+import {getCurrentWallet} from './wallet'
 
 const { Network } = pqccore
 
@@ -28,6 +29,19 @@ export function getServerConfig() {
       .then(response => {
         const { code, data } = response.data
         return dispatch(setServerConfig(data))
+      })
+      .catch(e => {
+        console.error(e)
+      })
+  }
+}
+
+export function reloadServer() {
+  return (dispatch: (action: actionType) => void) => {
+    request('/server/reload', 'post')
+      .then(response => {
+        const { code, data } = response.data
+        return dispatch(getCurrentWallet())
       })
       .catch(e => {
         console.error(e)

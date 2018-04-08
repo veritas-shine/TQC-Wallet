@@ -10,7 +10,7 @@
  *
  * @flow
  */
-import { app, BrowserWindow, ipcMain, dialog } from 'electron'
+import { app, BrowserWindow, ipcMain, dialog, clipboard } from 'electron'
 import CryptoJS from 'crypto-js'
 import bip39 from 'bip39'
 import pqccore from 'pqc-core'
@@ -116,9 +116,14 @@ ipcMain.on('save-wallet', (event, data) => {
   if (realPath) {
     // write to that path
     if(fs.writeFileSync(realPath, JSON.stringify(obj))) {
-      ipcMain.send('save-wallet-result')
+      event.sender.send('save-wallet-result')
     } else {
-      ipcMain.send('save-wallet-result', new Error('fail to save wallet'))
+      event.sender.send('save-wallet-result', new Error('fail to save wallet'))
     }
   }
+})
+
+ipcMain.on('copy-clipboard', (event, data) => {
+  clipboard.writeText(data)
+  event.sender.send('copy-clipboard-result', '')
 })
