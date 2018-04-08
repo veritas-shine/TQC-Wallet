@@ -9,14 +9,22 @@ import Table from 'grommet/components/Table'
 import TableRow from 'grommet/components/TableRow'
 import List from 'grommet/components/List'
 import moment from 'moment'
+import {connect} from 'react-redux'
 import TransactionItem from './TransactionItem'
 
 type Props = {
   data: any,
+  server: any,
   goBack: () => void
 };
 
-export default class BlockDetailView extends Component<Props> {
+function mapStateToProps(state) {
+  return {
+    server: state.server
+  };
+}
+
+class BlockDetailView extends Component<Props> {
   props: Props;
 
   componentWillMount() {
@@ -24,7 +32,8 @@ export default class BlockDetailView extends Component<Props> {
   }
 
   render() {
-    const { data } = this.props
+    const { data, server } = this.props
+    const { network: {publicKeyHash} } = server.config
     const tx = data.transactions[0]
     const { signature } = tx.inputs[0]
     const buffer = Buffer.from(signature, 'hex')
@@ -73,9 +82,11 @@ export default class BlockDetailView extends Component<Props> {
         </Section>
         <div style={style}>Transactions:</div>
         <List>
-          { data.transactions.map((looper, idx) => <TransactionItem key={ idx } data={ looper } />) }
+          { data.transactions.map((looper, idx) => <TransactionItem key={ idx } data={ looper } network={publicKeyHash} />) }
         </List>
       </Article>
     );
   }
 }
+
+export default connect(mapStateToProps)(BlockDetailView)

@@ -51,3 +51,8 @@ a:hover {
 .grommetux-password-input__input {
   letter-spacing: 14px;
 }
+
+.grommetux-tab--active .grommetux-tab__label {
+  color: white;
+  border-color: white;
+}
