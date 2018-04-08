@@ -191,6 +191,7 @@
     "bip39": "^2.5.0",
     "crypto-js": "^3.1.9-1",
     "devtron": "^1.4.0",
+    "electron-context-menu": "^0.9.1",
     "electron-debug": "^1.5.0",
     "font-awesome": "^4.7.0",
     "grommet": "^1.10.1",

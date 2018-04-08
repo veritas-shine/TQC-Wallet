@@ -4,7 +4,7 @@ import Section from 'grommet/components/Section'
 import Article from 'grommet/components/Article'
 import Header from 'grommet/components/Header'
 import LinkPrevious from 'grommet/components/icons/base/LinkPrevious'
-import Button from 'grommet/components/Button'
+import Anchor from 'grommet/components/Anchor'
 import Table from 'grommet/components/Table'
 import TableRow from 'grommet/components/TableRow'
 import List from 'grommet/components/List'
@@ -37,13 +37,19 @@ class BlockDetailView extends Component<Props> {
     const tx = data.transactions[0]
     const { signature } = tx.inputs[0]
     const buffer = Buffer.from(signature, 'hex')
-    const style = { borderBottom: '1px solid #2A2929', padding: 16, fontSize: '1.4em'}
-    return (<Article>
-        <Header>
-          <Button icon={ <LinkPrevious /> } label="Back" onClick={ this.props.goBack } plain />
-          <div>Block #{ data.height }</div>
+    const style = {
+      borderBottom: '1px solid #2A2929',
+      padding: 16,
+      fontSize: '1.4em',
+      textAlign: 'center'
+    }
+    return (<Article style={{paddingLeft: 20, paddingRight: 20}}>
+        <Header justify="between" style={{borderBottom: '1px solid #2A2929'}}>
+          <Anchor primary icon={ <LinkPrevious /> } href="#" label="Back" onClick={ this.props.goBack } />
+          <h2 style={{marginLeft: -82}}>Block #{ data.height }</h2>
+          <div />
         </Header>
-        <Section style={{padding: 0}}>
+        <Section style={{padding: 0, borderBottom: '1px solid #2A2929'}}>
           <Table>
             <thead></thead>
             <tbody>
@@ -80,7 +86,7 @@ class BlockDetailView extends Component<Props> {
             </tbody>
           </Table>
         </Section>
-        <div style={style}>Transactions:</div>
+        <h2 style={style}>Transactions:</h2>
         <List>
           { data.transactions.map((looper, idx) => <TransactionItem key={ idx } data={ looper } network={publicKeyHash} />) }
         </List>

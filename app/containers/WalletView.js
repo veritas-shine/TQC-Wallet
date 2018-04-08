@@ -6,13 +6,12 @@ import { bindActionCreators } from 'redux'
 import Value from 'grommet/components/Value'
 import Box from 'grommet/components/Box'
 import Button from 'grommet/components/Button'
+import Anchor from 'grommet/components/Anchor'
 import Label from 'grommet/components/Label'
 import Article from 'grommet/components/Article'
 import Section from 'grommet/components/Section'
 import Columns from 'grommet/components/Columns'
 import LockIcon from 'grommet/components/icons/base/Lock'
-import Menu from 'grommet/components/Menu'
-import Anchor from 'grommet/components/Anchor'
 import QRCode from 'qrcode.react'
 
 import SendView from './SendView'
@@ -83,11 +82,11 @@ class WalletView extends Component<Props> {
       const { unit } = this.state
       return (
         <Article>
-          <div>
-            <Button
-              onClick={ this.lockAccount } style={ { position: 'fixed', right: 44, top: 120 } } accent
-              icon={ <LockIcon colorIndex="plain" /> } />
-          </div>
+          <Box colorIndex="grey-4">
+            <Anchor
+              onClick={ this.lockAccount } style={ { position: 'fixed', right: 44, top: 120 } } primary
+              icon={ <LockIcon /> } />
+          </Box>
           <Section justify="center" align="center">
             Address: <Label size="small" style={ { marginBottom: 20 } }>{ current.address }</Label>
             <QRCode value={ current.address || '' } />

@@ -8,11 +8,12 @@ export default () => (<Footer justify='between' pad="small" style={ { padding: '
   <Label>
     TQC Wallet
   </Label>
-  <Box direction='row'
-       align='center'
-       pad={ { "between": "medium" } }>
+  <Box
+    direction="row"
+    align="center"
+    pad={ { between: 'medium' } }>
     <Paragraph margin='none'>
-      © 2018 TQC Wallet
+      © 2018 Veritas Shine
     </Paragraph>
   </Box>
 </Footer>)

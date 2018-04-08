@@ -4,6 +4,7 @@ import FormFields from 'grommet/components/FormFields'
 import FormField from 'grommet/components/FormField'
 import Footer from 'grommet/components/Footer'
 import Button from 'grommet/components/Button'
+import Anchor from 'grommet/components/Anchor'
 import Form from 'grommet/components/Form'
 import Box from 'grommet/components/Box'
 import LinkPrevious from 'grommet/components/icons/base/LinkPrevious'
@@ -36,7 +37,7 @@ class SendView extends PureComponent<Props> {
 
   constructor(props, context) {
     super(props, context)
-    this.state = {}
+    this.state = {unit: 'TQC'}
   }
 
   _onChange = (event) => {
@@ -50,7 +51,7 @@ class SendView extends PureComponent<Props> {
       if (base58check.decode(address)) {
         // decode ok
         const map = UnitView.UnitMap
-        const realAmount = amount * (map[unit] / map.TQC)
+        const realAmount = amount * map[unit]
         this.props.createTransaction({ amount: parseFloat(realAmount), to: address }, message => {
           if (message) {
             // TODO
@@ -75,11 +76,11 @@ class SendView extends PureComponent<Props> {
     return (<Box align="center" justify="center">
       <Form onSubmit={ this.onSubmit }>
         <Header>
-          <Button icon={ <LinkPrevious /> } label="Back" onClick={ this.props.hideSendView } plain />
+          <Anchor icon={ <LinkPrevious /> } label="Back" onClick={ this.props.hideSendView } primary />
         </Header>
         <FormFields>
           <fieldset>
-            <legend>Send TQC:</legend>
+            <legend>Send TQC to another address:</legend>
             <FormField label="Address:" htmlFor="svaddress" error={ addressError }>
               <input id="svaddress" name="address" type="text" onChange={ this._onChange } />
             </FormField>
