@@ -6,6 +6,7 @@ import Search from 'grommet/components/Search'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import Table from 'grommet/components/Table'
+import moment from 'moment'
 
 import * as BlockActions from '../actions/block'
 import BlockItem from '../components/BlockItem'
@@ -65,6 +66,7 @@ class BlockView extends PureComponent<Props> {
     if (currentBlock) {
       return <BlockDetailView data={ currentBlock } goBack={ this.hideBlockDetailView } />
     } else {
+      const now = moment()
       return (<Box style={ { padding: 20 } }>
         <Header>
           <Title>
@@ -90,8 +92,8 @@ class BlockView extends PureComponent<Props> {
         <Table>
           { BlockItem.Column }
           <tbody>
-          { list.map((looper, idx) => <BlockItem key={ idx } data={ looper }
-                                                 showBlockDetail={ this.showBlockDetail } />) }
+          { list.map((looper, idx) =>
+            (<BlockItem key={ idx } data={ looper } now={ now } showBlockDetail={ this.showBlockDetail } />)) }
           </tbody>
         </Table>
       </Box>)

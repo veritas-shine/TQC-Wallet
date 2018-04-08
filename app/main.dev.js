@@ -18,6 +18,15 @@ import fs from 'fs'
 import MenuBuilder from './menu'
 import { getWalletPath } from './utils/storage'
 
+require('electron-context-menu')({
+  showInspectElement: false,
+  prepend: (params, browserWindow) => [{
+    label: 'Rainbow',
+    // Only show it when right-clicking images
+    visible: params.mediaType === 'label'
+  }]
+})
+
 const { Keypair } = pqccore
 
 let mainWindow = null;

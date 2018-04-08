@@ -1,12 +1,12 @@
 // @flow
 import React, { Component } from 'react'
-import Title from 'grommet/components/Title'
 import TableRow from 'grommet/components/TableRow'
-import Timestamp from 'grommet/components/Timestamp'
 import moment from 'moment'
 import { Link } from 'react-router-dom'
+import {formatTime} from '../utils/time'
 
 type Props = {
+  now: any,
   data: any,
   showBlockDetail: () => void
 };
@@ -19,7 +19,7 @@ export default class BlockItem extends Component<Props> {
     showBlockDetail(data)
   }
   render() {
-    const {data} = this.props
+    const {data, now} = this.props
     const tx = data.transactions[0]
     const {signature} = tx.inputs[0]
     const buffer = Buffer.from(signature, 'hex')
@@ -32,7 +32,7 @@ export default class BlockItem extends Component<Props> {
           {buffer.toString('utf8')}
         </td>
         <td>
-          {moment(data.time * 1000).format('YYYY-MM-DD HH:mm:ss')}
+          {formatTime(moment(data.time * 1000), now)}
         </td>
         <td>
           {data.transactions.length}

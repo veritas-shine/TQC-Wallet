@@ -57,6 +57,10 @@ a:hover {
   border-color: white;
 }
 
+.grommet.grommetux-app--centered {
+  max-width: unset;
+}
+
 td {
   padding-top: 5px !important;
   padding-bottom: 5px !important;

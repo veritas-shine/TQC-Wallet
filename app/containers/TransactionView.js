@@ -5,12 +5,13 @@ import Box from 'grommet/components/Box'
 import Search from 'grommet/components/Search'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import Table from 'grommet/components/Table'
+import List from 'grommet/components/List'
 
 import * as transactionActions from '../actions/transaction'
 import TransactionItem from '../components/TransactionItem'
 
 type Props = {
+  wallet: any,
   server: any,
   transaction: any,
   getTransactionList: () => void,
@@ -19,6 +20,7 @@ type Props = {
 
 function mapStateToProps(state) {
   return {
+    wallet: state.wallet,
     transaction: state.transaction,
     server: state.server
   };
@@ -53,8 +55,9 @@ class TransactionView extends PureComponent<Props> {
   }
 
   render() {
-    const { transaction: { list }, server } = this.props
+    const { transaction: { list }, server, wallet: {current} } = this.props
     const { network: {publicKeyHash} } = server.config
+    const myAddress = current.address
     return (<Box style={ { padding: 20 } }>
       <Header>
         <Title>
@@ -77,12 +80,10 @@ class TransactionView extends PureComponent<Props> {
           />
         </Box>
       </Header>
-      <Table>
-        { TransactionItem.Column }
-        <tbody>
-        { list.map((looper, idx) => <TransactionItem key={ idx } data={ looper } network={ publicKeyHash } />) }
-        </tbody>
-      </Table>
+      <List>
+        { list.map((looper, idx) =>
+          (<TransactionItem key={ idx } data={ looper } network={ publicKeyHash } myAddress={myAddress} />)) }
+      </List>
     </Box>)
   }
 }

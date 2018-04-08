@@ -9,10 +9,11 @@ import Table from 'grommet/components/Table'
 import TableRow from 'grommet/components/TableRow'
 import List from 'grommet/components/List'
 import moment from 'moment'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 import TransactionItem from './TransactionItem'
 
 type Props = {
+  wallet: any,
   data: any,
   server: any,
   goBack: () => void
@@ -20,6 +21,7 @@ type Props = {
 
 function mapStateToProps(state) {
   return {
+    wallet: state.wallet,
     server: state.server
   };
 }
@@ -32,8 +34,9 @@ class BlockDetailView extends Component<Props> {
   }
 
   render() {
-    const { data, server } = this.props
-    const { network: {publicKeyHash} } = server.config
+    const { data, server, wallet: { current } } = this.props
+    const { network: { publicKeyHash } } = server.config
+    const myAddress = current.address
     const tx = data.transactions[0]
     const { signature } = tx.inputs[0]
     const buffer = Buffer.from(signature, 'hex')
@@ -43,13 +46,13 @@ class BlockDetailView extends Component<Props> {
       fontSize: '1.4em',
       textAlign: 'center'
     }
-    return (<Article style={{paddingLeft: 20, paddingRight: 20}}>
-        <Header justify="between" style={{borderBottom: '1px solid #2A2929'}}>
+    return (<Article style={ { paddingLeft: 20, paddingRight: 20 } }>
+        <Header justify="between" style={ { borderBottom: '1px solid #2A2929' } }>
           <Anchor primary icon={ <LinkPrevious /> } href="#" label="Back" onClick={ this.props.goBack } />
-          <h2 style={{marginLeft: -82}}>Block #{ data.height }</h2>
+          <h2 style={ { marginLeft: -82 } }>Block #{ data.height }</h2>
           <div />
         </Header>
-        <Section style={{padding: 0, borderBottom: '1px solid #2A2929'}}>
+        <Section style={ { padding: 0, borderBottom: '1px solid #2A2929' } }>
           <Table>
             <thead></thead>
             <tbody>
@@ -86,9 +89,10 @@ class BlockDetailView extends Component<Props> {
             </tbody>
           </Table>
         </Section>
-        <h2 style={style}>Transactions:</h2>
+        <h2 style={ style }>Transactions:</h2>
         <List>
-          { data.transactions.map((looper, idx) => <TransactionItem key={ idx } data={ looper } network={publicKeyHash} />) }
+          { data.transactions.map((looper, idx) =>
+            (<TransactionItem key={ idx } data={ looper } network={ publicKeyHash } myAddress={ myAddress } />)) }
         </List>
       </Article>
     );

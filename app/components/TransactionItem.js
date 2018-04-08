@@ -10,6 +10,7 @@ const { UnitMap } = UnitView
 const { base58check } = pqccore.Encoding
 
 type Props = {
+  myAddress: string,
   data: any,
   network: any
 };
@@ -24,11 +25,27 @@ function hashToAddress(network, hash) {
   return base58check.encode(Buffer.concat([network, buffer]))
 }
 
+/**
+ *
+ * @param address {String}
+ * @param myAddress {String}
+ * @return {string}
+ */
+function displayAddress(address, myAddress) {
+  const nameStyle = {
+    background: '#865cd6',
+    paddingLeft: 5,
+    paddingRight: 5,
+    borderRadius: 3
+  }
+  return address === myAddress ? (<span style={ nameStyle }>me</span>) : address
+}
+
 export default class TransactionItem extends Component<Props> {
   props: Props;
 
   render() {
-    const { data, network } = this.props
+    const { data, network, myAddress } = this.props
     const { inputs, outputs } = data
     const prefix = Buffer.from([network])
     const wrapperStyle = {
@@ -51,10 +68,10 @@ export default class TransactionItem extends Component<Props> {
           <div style={ wrapperStyle }>
             <div>{ data.txid }</div>
             <div style={ contentStyle }>
-              <div>{ output.amount / UnitMap.TQC } TQC</div>
-              <div>{ buffer.toString('utf8') }</div>
-              <div><LinkNext /></div>
-              <div>{ address }</div>
+              <div style={ { flexGrow: 1, display: 'flex' } }>{ output.amount / UnitMap.TQC } TQC</div>
+              <div style={ { flexGrow: 50, maxWidth: '50%', display: 'flex' } }>{ buffer.toString('utf8') }</div>
+              <div style={ { flexGrow: 1, display: 'flex' } }><LinkNext /></div>
+              <div style={ { flexGrow: 10, display: 'flex' } }>{ displayAddress(address, myAddress) }</div>
             </div>
           </div>
         </ListItem>
@@ -64,17 +81,18 @@ export default class TransactionItem extends Component<Props> {
         <ListItem justify="between">
           <div style={ wrapperStyle }>
             <div>{ data.txid }</div>
-            <div style={contentStyle}>
-              <div className="inputs">
+            <div style={ contentStyle }>
+              <div className="inputs" style={ { flexGrow: 50, maxWidth: '50%', display: 'flex' } }>
                 {
-                  inputs.map((looper, idx) => <div key={ idx }>{ 1 } TQC from</div>)
+                  inputs.map((looper, idx) => <div key={ idx } style={{display: 'flex'}}>{ 1 } TQC from</div>)
                 }
               </div>
               <div><LinkNext /></div>
-              <div className="outputs">
+              <div className="outputs" style={ { flexGrow: 10, display: 'flex', flexDirection: 'column' } }>
                 {
-                  outputs.map((looper, idx) => <div key={ idx }>
-                    { looper.amount / UnitMap.TQC } TQC to { hashToAddress(prefix, looper.publicKeyHash) }
+                  outputs.map((looper, idx) => <div key={ idx } style={{display: 'flex'}}>
+                    { looper.amount / UnitMap.TQC } TQC
+                    to { displayAddress(hashToAddress(prefix, looper.publicKeyHash), myAddress) }
                   </div>)
                 }
               </div>
