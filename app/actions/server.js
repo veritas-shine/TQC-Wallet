@@ -48,3 +48,18 @@ export function reloadServer() {
       })
   }
 }
+
+export function startMine(callback) {
+  return (dispatch: (action: actionType) => void) => {
+    request('/mine/start', 'post')
+      .then(response => {
+        const {code, data} = response.data
+        if (callback) {
+          callback(data)
+        }
+      })
+      .catch(e => {
+        console.error(e)
+      })
+  }
+}
