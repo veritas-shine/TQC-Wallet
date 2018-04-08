@@ -11,8 +11,9 @@ import pqccore from 'pqc-core'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as transactionActions from '../actions/transaction'
+import UnitView from '../components/UnitView'
 
-const {base58check} = pqccore.Encoding
+const { base58check } = pqccore.Encoding
 
 type Props = {
   transaction: any,
@@ -39,16 +40,18 @@ class SendView extends PureComponent<Props> {
   }
 
   _onChange = (event) => {
-    const {name, value} = event.target
-    this.setState({[name]: value})
+    const { name, value } = event.target
+    this.setState({ [name]: value })
   }
   onSubmit = (event) => {
     event.preventDefault()
-    const {address, amount} = this.state
+    const { address, amount, unit } = this.state
     try {
       if (base58check.decode(address)) {
         // decode ok
-        this.props.createTransaction({amount: parseFloat(amount), to: address}, message => {
+        const map = UnitView.UnitMap
+        const realAmount = amount * (map[unit] / map.TQC)
+        this.props.createTransaction({ amount: parseFloat(realAmount), to: address }, message => {
           if (message) {
             // TODO
           } else {
@@ -59,12 +62,16 @@ class SendView extends PureComponent<Props> {
     } catch (e) {
       // error
       console.error(e)
-      this.setState({addressError: e.message})
+      this.setState({ addressError: e.message })
     }
   }
 
+  didUnitChanged = (unit, scale) => {
+    this.setState({ unit, scale })
+  }
+
   render() {
-    const {addressError} = this.state
+    const { addressError } = this.state
     return (<Box align="center" justify="center">
       <Form onSubmit={ this.onSubmit }>
         <Header>
@@ -73,11 +80,12 @@ class SendView extends PureComponent<Props> {
         <FormFields>
           <fieldset>
             <legend>Send TQC:</legend>
-            <FormField label="Address:" htmlFor="svaddress" error={addressError}>
+            <FormField label="Address:" htmlFor="svaddress" error={ addressError }>
               <input id="svaddress" name="address" type="text" onChange={ this._onChange } />
             </FormField>
             <FormField label="Amount:" htmlFor="svamount">
-              <input id="svamount" name="amount" type="text" onChange={ this._onChange } />
+              <input id="svamount" style={ { width: 'calc(100% - 120px)' } } name="amount" type="text"
+                     onChange={ this._onChange } />
             </FormField>
             <FormField label="Fee:" htmlFor="svfee">
               <input id="svfee" name="fee" type="text" disabled />
@@ -88,6 +96,10 @@ class SendView extends PureComponent<Props> {
           <Button label="Submit" type="submit" primary />
         </Footer>
       </Form>
+      <div style={ { position: 'relative' } }>
+        <UnitView style={ { position: 'absolute', top: '-218px', right: '-240px' } }
+                  didUnitChanged={ this.didUnitChanged } />
+      </div>
     </Box>)
   }
 }

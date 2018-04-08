@@ -9,7 +9,8 @@ type Props = {
 const kUnitMap = {
   TQC: 1e8,
   mTQC: 1e5,
-  uTQC: 1e2
+  uTQC: 1e2,
+  glv: 1
 }
 
 export default class UnitView extends PureComponent<Props> {
@@ -28,8 +29,8 @@ export default class UnitView extends PureComponent<Props> {
   render() {
     const { unit } = this.state
     const getClass = (u) => (u === unit ? 'active' : '')
-
-    return (<Menu label={ unit }>
+    const {didUnitChanged, ...rest} = this.props
+    return (<Menu label={ unit } {...rest}>
       <Anchor href="#" className={ getClass('TQC') } onClick={ () => this.changeUnit('TQC') }>
         TQC
       </Anchor>

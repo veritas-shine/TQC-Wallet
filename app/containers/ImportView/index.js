@@ -17,7 +17,6 @@ import * as serverActions from '../../actions/server'
 const { ipcRenderer } = require('electron')
 
 type Props = {
-  wallet: any,
   server: any,
   reloadServer: () => void,
   needReloadView: () => void
@@ -25,7 +24,6 @@ type Props = {
 
 function mapStateToProps(state) {
   return {
-    wallet: state.wallet,
     server: state.server.config
   };
 }
@@ -77,7 +75,6 @@ class ImportView extends PureComponent<Props> {
   }
 
   render() {
-    const { wallet: { current } } = this.props
     const { seed, passwordError } = this.state
     return (
       <Article colorIndex="grey-4" justify="center" align="center" flex="grow" style={ { height: 'calc(100vh)' } }>
