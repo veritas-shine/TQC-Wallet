@@ -11,12 +11,17 @@ import Article from 'grommet/components/Article'
 import Section from 'grommet/components/Section'
 import Columns from 'grommet/components/Columns'
 import LockIcon from 'grommet/components/icons/base/Lock'
+import Menu from 'grommet/components/Menu'
+import Anchor from 'grommet/components/Anchor'
 import QRCode from 'qrcode.react'
 
 import SendView from './SendView'
 import UnlockView from './UnLockView'
 import type { walletStateType } from '../reducers/wallet'
 import * as WalletActions from '../actions/wallet'
+import UnitView from '../components/UnitView'
+
+const kUnitMap = UnitView.UnitMap
 
 type Props = {
   wallet: walletStateType,
@@ -39,7 +44,10 @@ class WalletView extends Component<Props> {
 
   constructor(props, context) {
     super(props, context)
-    this.state = { showSendView: false }
+    this.state = {
+      showSendView: false,
+      unit: 'TQC'
+    }
   }
 
   showSendModal = () => {
@@ -57,10 +65,14 @@ class WalletView extends Component<Props> {
 
   renderUnlockView = () => {
     return (
-      <Box justify="center" align="center" flex="grow" style={{height: 'calc(100vh - 300px)'}}>
+      <Box justify="center" align="center" flex="grow" style={ { height: 'calc(100vh - 300px)' } }>
         <UnlockView />
       </Box>
     )
+  }
+
+  changeUnit = (unit) => {
+    this.setState({ unit })
   }
 
   renderWallet = () => {
@@ -68,6 +80,7 @@ class WalletView extends Component<Props> {
     if (locked) {
       return this.renderUnlockView()
     } else {
+      const { unit } = this.state
       return (
         <Article>
           <div>
@@ -80,7 +93,10 @@ class WalletView extends Component<Props> {
             <QRCode value={ current.address || '' } />
           </Section>
           <Section>
-            <Value value={ current.balance / 1e8 } label="TQC" />
+            <div style={{textAlign: 'center'}}>
+              <Value value={ current.balance / kUnitMap[unit] } />
+              <UnitView didUnitChanged={ this.changeUnit } />
+            </div>
           </Section>
           <Section justify="center" align="center">
             <Columns justify="center">
