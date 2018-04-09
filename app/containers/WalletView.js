@@ -24,7 +24,8 @@ const kUnitMap = UnitView.UnitMap
 
 type Props = {
   wallet: walletStateType,
-  lockWallet: () => void
+  lockWallet: () => void,
+  getCurrentWallet: () => void
 };
 
 
@@ -47,6 +48,11 @@ class WalletView extends Component<Props> {
       showSendView: false,
       unit: 'TQC'
     }
+  }
+
+  componentWillMount() {
+    console.log(20, this.props)
+    this.props.getCurrentWallet()
   }
 
   showSendModal = () => {

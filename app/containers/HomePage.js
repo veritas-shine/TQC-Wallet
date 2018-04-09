@@ -24,13 +24,11 @@ function mapDispatchToProps(dispatch) {
 }
 
 class HomePage extends Component<Props> {
-  props: Props;
-  constructor(props, context) {
-    super(props, context)
-    this.props.getCurrentWallet()
-  }
+  props: Props
+
   componentWillMount() {
     console.log(20, this.props)
+    this.props.getCurrentWallet()
   }
 
   needReloadView = () => {
