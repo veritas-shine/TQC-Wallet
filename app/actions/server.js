@@ -63,3 +63,18 @@ export function startMine(callback) {
       })
   }
 }
+
+export function pruneTXs(callback) {
+  return (dispatch: (action: actionType) => void) => {
+    request('/transaction/prune', 'post')
+      .then(response => {
+        const {code, data} = response.data
+        if (callback) {
+          callback(data)
+        }
+      })
+      .catch(e => {
+        console.error(e)
+      })
+  }
+}
