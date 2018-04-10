@@ -67,36 +67,39 @@ class BlockView extends PureComponent<Props> {
       return <BlockDetailView data={ currentBlock } goBack={ this.hideBlockDetailView } />
     } else {
       const now = moment()
-      return (<Box style={ { padding: 20 } }>
-        <Header>
-          <Title>
-            Search:
-          </Title>
-          <Box
-            flex
-            justify='end'
-            direction='row'
-            responsive={ false }>
-            <Search
-              style={ { border: '1px solid #2A2929' } }
-              inline
-              fill
-              size="medium"
-              placeHolder="Block ID"
-              dropAlign={ { right: 'right' } }
-              onDOMChange={ this.handleChange }
-              onKeyDown={ this.handleSearch }
-            />
-          </Box>
-        </Header>
-        <Table>
-          { BlockItem.Column }
-          <tbody>
-          { list.map((looper, idx) =>
-            (<BlockItem key={ idx } data={ looper } now={ now } showBlockDetail={ this.showBlockDetail } />)) }
-          </tbody>
-        </Table>
-      </Box>)
+      return (
+        <Box style={ { padding: 20 } }>
+          <Header>
+            <Title>
+              Search:
+            </Title>
+            <Box
+              flex
+              justify='end'
+              direction='row'
+              responsive={ false }>
+              <Search
+                style={ { border: '1px solid #2A2929' } }
+                inline
+                fill
+                size="medium"
+                placeHolder="Block ID"
+                dropAlign={ { right: 'right' } }
+                onDOMChange={ this.handleChange }
+                onKeyDown={ this.handleSearch }
+              />
+            </Box>
+          </Header>
+          <Table>
+            { BlockItem.Column }
+            <tbody>
+            {
+              list.map((looper, idx) =>
+                (<BlockItem key={ idx } data={ looper } now={ now } showBlockDetail={ this.showBlockDetail } />))
+            }
+            </tbody>
+          </Table>
+        </Box>)
     }
   }
 }
